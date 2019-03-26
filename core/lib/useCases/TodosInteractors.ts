@@ -2,18 +2,40 @@
  * Business App logic of todos app
  */
 
+import { Todos, TodoItem } from "../entities";
+
 export class TodosInteractors {
-  todos: Array<string>;
+  todos: Todos;
 
   constructor() {
-    this.todos = [];
+    this.todos = new Todos();
   }
 
-  create() {}
+  create(content: string) {
+    if (this.todos.list.length >= 4) {
+      throw new Error("Max Todos is 4");
+    }
 
-  read() {}
+    this.todos.create(content);
+  }
 
-  update() {}
+  readAll(): Array<TodoItem> {
+    return this.todos.readAll();
+  }
 
-  remove() {}
+  readOne(id: number): TodoItem {
+    return this.todos.readOne(id);
+  }
+
+  update(id: number, newValue: string) {
+    if (newValue === "fajar ganteng") {
+      throw new Error("Duh mantap gan");
+    }
+
+    this.todos.update(id, newValue);
+  }
+
+  remove(id: number) {
+    this.todos.remove(id);
+  }
 }

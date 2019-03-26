@@ -1,4 +1,4 @@
-class TodoItem {
+export class TodoItem {
   id: number;
   value: string;
 
@@ -9,39 +9,38 @@ class TodoItem {
 }
 
 export class Todos {
-  todos: Array<TodoItem>;
+  list: Array<TodoItem>;
 
   constructor() {
-    this.todos = [];
+    this.list = [];
   }
 
   create(content: string) {
-    const currentId = this.todos.length + 1;
+    const currentId = this.list.length + 1;
     const newId = currentId + 1;
     let newContent = new TodoItem(newId, content);
-    this.todos.push(newContent);
-    return this.todos;
+    this.list.push(newContent);
   }
 
   update(id: number, newValue: string) {
-    let todoIndex = this.todos.findIndex(todo => todo.id === id);
+    let todoIndex = this.list.findIndex(todo => todo.id === id);
     if (todoIndex === -1) throw new Error("Todo item not found");
-    this.todos[todoIndex].value = newValue;
-    return this.todos;
+    this.list[todoIndex].value = newValue;
   }
 
-  readOne(id: number) {
-    let todo = this.todos.find(todo => todo.id === id);
-    return todo;
+  readOne(id: number): TodoItem {
+    let todo = this.list.find(todo => todo.id === id);
+    if (todo) return todo;
+
+    throw new Error("Todo Item not found");
   }
 
-  readAll() {
-    return this.todos;
+  readAll(): Array<TodoItem> {
+    return this.list;
   }
 
   remove(id: number) {
-    let todoIndex = this.todos.findIndex(todo => todo.id === id);
-    this.todos.splice(todoIndex, 1);
-    return this.todos;
+    let todoIndex = this.list.findIndex(todo => todo.id === id);
+    this.list.splice(todoIndex, 1);
   }
 }

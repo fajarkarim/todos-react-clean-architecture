@@ -12,6 +12,8 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "@types/node": "^11.11.3"
+    "@types/node": "^11.11.3",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6"
   }
 }

@@ -5,3 +5,5 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./entities"));
 __export(require("./useCases"));
+__export(require("./adapters"));
+__export(require("./frameworks"));

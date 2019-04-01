@@ -39,6 +39,8 @@ class App extends Component<Props, States> {
     let todos = new TodosInteractors();
     todos.create(todo);
     console.log(todos);
+    let items = todos.readAll();
+    console.log("items", items);
     // this.props.dispatchCreateTodo(todo);
   };
 

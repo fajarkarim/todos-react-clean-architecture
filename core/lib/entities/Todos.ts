@@ -11,8 +11,8 @@ export class TodoItem {
 export class Todos {
   list: Array<TodoItem>;
 
-  constructor() {
-    this.list = [];
+  constructor(items: Array<TodoItem>) {
+    this.list = items;
   }
 
   create(content: string) {

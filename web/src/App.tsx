@@ -17,6 +17,7 @@ import Todo from "./components/Todo";
 interface Props {
   todos: Todos;
   dispatchCreateTodo: (content: string) => void;
+  dispatchRemoveTodo: (id: number) => void;
 }
 
 interface States {
@@ -34,32 +35,42 @@ class App extends Component<Props, States> {
     });
   };
 
-  handleOnSubmit = (): any => {
-    const { todo } = this.state;
-    let todos = new TodosInteractors();
-    todos.create(todo);
-    console.log(todos);
-    let items = todos.readAll();
-    console.log("items", items);
-    // this.props.dispatchCreateTodo(todo);
+  handleOnRemove = (id: number) => (e: EventListener) => {
+    this.props.dispatchRemoveTodo(id);
   };
 
-  componentWillReceiveProps(nextProps: any) {
-    console.log("next props ", nextProps);
-  }
+  handleOnSubmit = (): any => {
+    const { todo } = this.state;
+    this.props.dispatchCreateTodo(todo);
+    this.clearInput();
+  };
+
+  clearInput = () => {
+    this.setState({
+      todo: ""
+    });
+  };
 
   render() {
-    const { todos } = this.props;
-    // console.log("todos ", todos);
+    const {
+      todos: { list }
+    } = this.props;
+
     const { todo } = this.state;
 
     return (
       <Layout>
         <Header />
-        {/* {todos.list.map(todo => {
-          const { value } = todo;
-          return <Todo text={value} />;
-        })} */}
+        {list.map(todo => {
+          const { value, id } = todo;
+          return (
+            <Todo
+              text={value}
+              key={"todo" + id}
+              onRemove={this.handleOnRemove(id)}
+            />
+          );
+        })}
 
         <Input
           onChange={this.handleOnChange}
@@ -78,7 +89,8 @@ const mapStateToProps = (state: StateType) => {
 };
 
 const mapDispatchToProps = {
-  dispatchCreateTodo: createTodoAction
+  dispatchCreateTodo: createTodoAction,
+  dispatchRemoveTodo: removeTodoAction
 };
 
 export default connect(

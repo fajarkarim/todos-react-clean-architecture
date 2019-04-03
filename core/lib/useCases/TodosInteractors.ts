@@ -7,8 +7,8 @@ import { Todos, TodoItem } from "../entities";
 export class TodosInteractors {
   todos: Todos;
 
-  constructor() {
-    this.todos = new Todos();
+  constructor(items: Array<TodoItem>) {
+    this.todos = new Todos(items);
   }
 
   create(content: string) {

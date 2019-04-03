@@ -1,6 +1,12 @@
 import React from "react";
 
-const Todo = ({ text, onRemove }: any) => {
+interface Props {
+  text: string;
+  onRemove: any;
+  key?: string;
+}
+
+const Todo = ({ text, onRemove }: Props) => {
   return (
     <div style={{ position: "relative" }}>
       <span>{text}</span>

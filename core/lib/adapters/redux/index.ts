@@ -16,7 +16,7 @@ type ActionType = {
   content: string;
 };
 
-const INITIAL_STATE = new Todos();
+const INITIAL_STATE = new Todos([]);
 const CREATE = "CREATE";
 const UPDATE = "UPDATE";
 const REMOVE = "REMOVE";
@@ -41,22 +41,22 @@ export const removeTodoAction = (id: number) => ({
 });
 
 /** reducers */
-const createTodosReducer = (content: string) => {
-  const interactor = new TodosInteractors();
-  interactor.create(content);
-  return interactor.todos.list;
+const createTodosReducer = (todos: StateSliceType, action: ActionType) => {
+  const interactor = new TodosInteractors(todos.list);
+  interactor.create(action.content);
+  return new Todos(interactor.todos.list);
 };
 
-const updateTodosReducer = (id: number, newContent: string) => {
-  const interactor = new TodosInteractors();
-  interactor.update(id, newContent);
-  return interactor.todos.list;
+const updateTodosReducer = (todos: StateSliceType, action: ActionType) => {
+  const interactor = new TodosInteractors(todos.list);
+  interactor.update(action.id, action.content);
+  return new Todos(interactor.todos.list);
 };
 
-const removeTodosReducer = (id: number) => {
-  const interactor = new TodosInteractors();
-  interactor.remove(id);
-  return interactor.todos.list;
+const removeTodosReducer = (todos: StateSliceType, action: ActionType) => {
+  const interactor = new TodosInteractors(todos.list);
+  interactor.remove(action.id);
+  return new Todos(interactor.todos.list);
 };
 
 export const todosReducer = (
@@ -65,11 +65,11 @@ export const todosReducer = (
 ) => {
   switch (action.type) {
     case CREATE:
-      return createTodosReducer(action.content);
+      return createTodosReducer(state, action);
     case UPDATE:
-      return updateTodosReducer(action.id, action.content);
+      return updateTodosReducer(state, action);
     case REMOVE:
-      return removeTodosReducer(action.id);
+      return removeTodosReducer(state, action);
     default:
       return state;
   }

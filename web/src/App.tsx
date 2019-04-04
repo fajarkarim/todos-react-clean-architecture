@@ -24,6 +24,25 @@ interface States {
   todo: string;
 }
 
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  componentDidCatch(error: any, info: any) {
+    // Display fallback UI
+    this.setState({ hasError: true });
+    // You can also log the error to an error reporting service
+    // logErrorToMyService(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
 class App extends Component<Props, States> {
   state = {
     todo: ""
@@ -41,8 +60,12 @@ class App extends Component<Props, States> {
 
   handleOnSubmit = (): any => {
     const { todo } = this.state;
-    this.props.dispatchCreateTodo(todo);
-    this.clearInput();
+    try {
+      this.props.dispatchCreateTodo(todo);
+      this.clearInput();
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   clearInput = () => {
@@ -59,25 +82,27 @@ class App extends Component<Props, States> {
     const { todo } = this.state;
 
     return (
-      <Layout>
-        <Header />
-        {list.map(todo => {
-          const { value, id } = todo;
-          return (
-            <Todo
-              text={value}
-              key={"todo" + id}
-              onRemove={this.handleOnRemove(id)}
-            />
-          );
-        })}
+      <ErrorBoundary>
+        <Layout>
+          <Header />
+          {list.map(todo => {
+            const { value, id } = todo;
+            return (
+              <Todo
+                text={value}
+                key={"todo" + id}
+                onRemove={this.handleOnRemove(id)}
+              />
+            );
+          })}
 
-        <Input
-          onChange={this.handleOnChange}
-          value={todo}
-          onSubmit={this.handleOnSubmit}
-        />
-      </Layout>
+          <Input
+            onChange={this.handleOnChange}
+            value={todo}
+            onSubmit={this.handleOnSubmit}
+          />
+        </Layout>
+      </ErrorBoundary>
     );
   }
 }
